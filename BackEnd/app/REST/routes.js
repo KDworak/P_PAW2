@@ -1,4 +1,4 @@
-import userEndpoint from './user.endpoint';
+import userEndpoint from "./user.endpoint.js";
 
 
 const routes = function (router) {

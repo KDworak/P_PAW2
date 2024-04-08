@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import * as _ from 'lodash';
 import Promise from 'bluebird';
-import applicationException from '../service/applicationException';
-import mongoConverter from '../service/mongoConverter';
+import applicationException from "../service/applicationException.js";
+import mongoConverter from "../service/mongoConverter.js";
 import uniqueValidator from 'mongoose-unique-validator';
 
 const userRole = {
@@ -17,7 +17,6 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true },
     role: { type: String, enum: userRoles, default: userRole.admin, required: false },
     active: { type: Boolean, default: true, required: false },
-    isAdmin: { type: Boolean, default: true, required: false }
 }, {
     collection: 'user'
 });

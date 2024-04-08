@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import config from '../config';
+import config from "../config.js";
 
 const auth = (req, res, next) => {
     let token = req.headers['x-auth-token'] || req.headers['authorization'];

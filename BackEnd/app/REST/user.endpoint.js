@@ -1,11 +1,11 @@
-import business from '../business/business.container';
-import applicationException from '../service/applicationException';
-import auth from '../middleware/auth';
+import businessContainer from "../business/business.container.js";
+import applicationException from "../service/applicationException.js";
+import auth from "../middleware/auth.js";
 
 const userEndpoint = (router) => {
     router.post('/api/user/auth', async (request, response, next) => {
         try {
-            let result = await business.getUserManager(request).authenticate(request.body.login, request.body.password);
+            let result = await businessContainer.getUserManager(request).authenticate(request.body.login, request.body.password);
             response.status(200).send(result);
         } catch (error) {
             applicationException.errorHandler(error, response);
@@ -14,7 +14,7 @@ const userEndpoint = (router) => {
 
     router.post('/api/user/create', async (request, response, next) => {
         try {
-            const result = await business.getUserManager(request).createNewOrUpdate(request.body);
+            const result = await businessContainer.getUserManager(request).createNewOrUpdate(request.body);
             response.status(201).send(result);
         } catch (error) {
             applicationException.errorHandler(error, response);
@@ -23,7 +23,7 @@ const userEndpoint = (router) => {
 
     router.delete('/api/user/logout/:userId', auth, async (request, response, next) => {
         try {
-            let result = await business.getUserManager(request).removeHashSession(request.body.userId);
+            let result = await businessContainer.getUserManager(request).removeHashSession(request.body.userId);
             response.status(200).send(result);
         } catch (error) {
             applicationException.errorHandler(error, response);
