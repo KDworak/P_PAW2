@@ -1,5 +1,5 @@
-//import PasswordDAO from '../DAO/passwordDAO';
-//import TokenDAO from '../DAO/tokenDAO';
+import PasswordDAO from '../DAO/passwordDAO';
+import TokenDAO from '../DAO/tokenDAO';
 import UserDAO from '../DAO/userDAO';
 import applicationException from '../service/applicationException';
 import sha1 from 'sha1';
