@@ -14,7 +14,8 @@ const userEndpoint = (router) => {
 
     router.post('/api/user/create', async (request, response, next) => {
         try {
-            const result = await businessContainer.getUserManager(request).createNewOrUpdate(request.body);
+            console.info(request.body);
+            const result = await businessContainer.getUserManager().createNewOrUpdate(request.body);
             response.status(201).send(result);
         } catch (error) {
             applicationException.errorHandler(error, response);
@@ -23,7 +24,7 @@ const userEndpoint = (router) => {
 
     router.delete('/api/user/logout/:userId', auth, async (request, response, next) => {
         try {
-            let result = await businessContainer.getUserManager(request).removeHashSession(request.body.userId);
+            let result = await businessContainer.getUserManager().removeHashSession(request.params.userId);
             response.status(200).send(result);
         } catch (error) {
             applicationException.errorHandler(error, response);
