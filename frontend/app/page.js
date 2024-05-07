@@ -31,6 +31,7 @@ export default function Home() {
       }
     };
 
+
     fetchAllImages();
   }, []);
   const showMore = (imgUrl, imId) =>{
@@ -47,7 +48,6 @@ export default function Home() {
 
   return (
     <div>
-      
 
       <div>
       {/* bg-gray-800  <Image src={imageUrl} layout="fill" onClick={()=>showMore(imageUrl)} objectFit="cover" objectPosition="center" alt={`Dog Image ${index}`} className="rounded-t-2xl rounded-t-2xl transition-transform duration-300 transform hover:scale-110 hover:cursor-pointer" /> */}
@@ -60,7 +60,7 @@ export default function Home() {
               <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80">Obrazek {index +1}</span>
             </div>
           ))}
-          
+
         </div>
       </div>
     </div>
