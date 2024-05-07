@@ -1,0 +1,12 @@
+FROM /Layerfile
+COPY /frontend ./fe
+COPY /BackEnd ./be
+
+RUN docker build -t frontend ./fe
+RUN docker build -t backend ./be
+  
+RUN docker run --hostname backend --name backend -d -p 3001:3001 -p 27017:27017 backend
+RUN docker run --hostname frontend --name frontend -d -p 80:80 frontend
+
+EXPOSE WEBSITE localhost:3001 /api
+EXPOSE WEBSITE localhost:80 /
