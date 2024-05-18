@@ -3,6 +3,7 @@ import TokenDAO from "../DAO/tokenDAO.js";
 import UserDAO from "../DAO/userDAO.js";
 import applicationException from "../service/applicationException.js";
 import sha1 from 'sha1';
+import imageDAO from "../DAO/imageDAO.js";
 
 function create(context) {
 
@@ -25,7 +26,12 @@ function create(context) {
     function getToken(token) {
         return {token: token.value};
     }
-
+    async function get(id) {
+        let result = await UserDAO.get(id);
+        if (result) {
+            return result;
+        }
+    }
     async function createNewOrUpdate(userData) {
         const user = await UserDAO.createNewOrUpdate(userData);
         if (await userData.password) {
@@ -42,7 +48,8 @@ function create(context) {
     return {
         authenticate: authenticate,
         createNewOrUpdate: createNewOrUpdate,
-        removeHashSession: removeHashSession
+        removeHashSession: removeHashSession,
+        get: get
     };
 }
 
