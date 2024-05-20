@@ -1,2 +1,2 @@
-import( 'babel-core/register' );
-import( './app/app');
+require( 'babel-core/register' );
+require( './app/app');

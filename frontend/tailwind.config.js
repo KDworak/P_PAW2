@@ -15,6 +15,7 @@ module.exports = {
       colors: {
         'myCol': '#243c5a',
         'myBg': '#cccccc',
+        'formInputBgCol': '#c9d7e8',
       },
       transitionDuration: {
         '2000': '2000ms',

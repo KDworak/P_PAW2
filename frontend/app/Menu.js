@@ -31,8 +31,8 @@ const Menu = () => {
       <div className={`flex flex-col lg:flex-row lg:justify-center lg:mx-auto ${isOpen ? 'block' : 'hidden lg:block'}`}>
         <Link href="/" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Zdjęcia</Link>
         <Link href="/addImage" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Dodaj zdjęcie</Link>
-        <Link href="#" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Logowanie</Link>
-        <Link href="#" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Rejestracja</Link>
+        <Link href="/login" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Logowanie</Link>
+        <Link href="/register" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Rejestracja</Link>
         <Link href="#" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">O serwisie</Link>
       </div>
       <button onClick={toggleMenu} className="block absolute right-5 top-5 lg:hidden p-4">
