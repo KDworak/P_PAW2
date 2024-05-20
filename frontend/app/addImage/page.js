@@ -39,30 +39,30 @@ const ImageUploadForm = () => {
     };
 
     return (
-        <div>
+         <div>
             
             <form onSubmit={handleSubmit} className='w-[90%] lg:w-[50%] mx-auto'>
             <p className='my-8 text-[24px] text-myCol text-red text-center lg:text-left'>Dodaj zdjęcie</p>
             <hr className='bg-myCol mb-8 h-0.5'/>
                 
                 <div className=''>
-                    <label htmlFor="id_user">User ID:</label><br/>
+                    <label htmlFor="id_user">Id uzytkownika:</label><br/>
                     <input type="text" id="id_user" value={id_user} onChange={(e) => setIdUser(e.target.value)} className="w-[100%] h-[48px] text-[24px] lg:w-[400px] border border-myCol rounded bg-formInputBgCol " />
                 </div>
                 <div className=''>
-                    <label htmlFor="title">Title:</label><br/>
+                    <label htmlFor="title">Tytuł:</label><br/>
                     <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)} className="w-[100%] h-[48px] text-[24px] lg:w-[400px] border border-myCol rounded bg-formInputBgCol" />
                 </div>
                 <div className=''>
-                    <label htmlFor="description">Description:</label><br/>
+                    <label htmlFor="description">Opis:</label><br/>
                     <textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} className="w-[100%] h-[48px] text-[24px] lg:w-[400px] border border-myCol rounded bg-formInputBgCol" />
                 </div>
                 <div className=''>
-                    <label htmlFor="is_public">Is Public:</label>
+                    <label htmlFor="is_public">Czy publiczne:</label>
                     <input type="checkbox" id="is_public" checked={isPublic} onChange={(e) => setIsPublic(e.target.checked)} className="ml-2 border border-myCol rounded " />
                 </div>
                 <div className=''>
-                    <label htmlFor="file">Wybeirz zdjęcie:</label><br/>
+                    <label htmlFor="file">Wybierz zdjęcie:</label><br/>
                     <input type="file" id="file" accept="image/*" onChange={handleFileChange} className=" " />
                 </div><br/>
                 <button type="submit" className='bg-myCol p-2 rounded-md text-myBg shadow-lg'>Upload</button>
