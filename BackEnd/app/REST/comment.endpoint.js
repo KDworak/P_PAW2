@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 const storageS = multer.memoryStorage();
 const upload =  multer({ storage: storageS});
-
+import UserDAO from "../DAO/userDAO.js";
 const CommentEndpoint = (router) => {
     router.put('/api/Comment/update/:id', async (req, res) => {
         try {
@@ -35,10 +35,10 @@ const CommentEndpoint = (router) => {
 
     router.post('/api/createComment', async (req, res, next) => {
         try {
-
+            const user = await UserDAO.get(req.body.id_User);
             let temp = {
                 id_IMG:req.body.id_IMG,
-                id_User:req.body.id_User ,
+                id_User:user.name ,
                 text:req.body.text ,
                 date:req.body.date,
             };
