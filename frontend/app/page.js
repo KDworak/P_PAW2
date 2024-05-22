@@ -27,7 +27,7 @@ export default function Home() {
           return null; // Jeśli image_data lub imgType nie istnieje, zwracamy null
         });
 
-        // Filtrujemy null wartości, które mogą pojawić się, gdy brakuje image_data lub imgType
+        // Filtrujemy wartości null, gdy brakuje image_data lub imgType
         const filteredImages = convertedImages.filter(image => image !== null);
 
         setAllImages(filteredImages);
@@ -44,7 +44,7 @@ export default function Home() {
 
 
   const showMore = async (image) => {
-    bigImgActive!=null?setBigImgActive(null):setBigImgActive(image);
+    setBigImgActive(image);
     try {
       const response = await fetch(`http://127.0.0.1:3001/api/Comment/byId/${image._id}`);
       const commentsData = await response.json();
@@ -54,6 +54,10 @@ export default function Home() {
     }
   };
 
+  const closeMore = () => {
+    setBigImgActive(null);
+    return 0;
+  };
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -73,7 +77,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           id_IMG: bigImgActive._id,
-          id_User: '6623f35c7a66eb37ff705cf3', 
+          id_User: '664db6da0c80acd3c6a7e7c4', 
           text: commentText,
           date: formattedDate,
         }),
@@ -81,6 +85,7 @@ export default function Home() {
 
       if (response.ok) {
         console.log('Comment added');
+        showMore(bigImgActive);
         setCommentText('');
       } else {
         alert('Error adding comment');
@@ -106,20 +111,27 @@ export default function Home() {
 
 
       {//bigImgActive?<div class="flex"><div><Image src={bigImgActive}  onClick={()=>showMore(bigImgActive)} layout="intrinsic" height="200" width="500" alt={"Image"} className=" top-1/3 rounded-t-2xl0 fixed rounded-t-2xl z-40 hover:cursor-pointer" /></div>
-            bigImgActive?<div className=" absolute left-0 right-0 mx-auto  flex w-[100%] lg:w-[80%] flex-col lg:flex-row bg-white shadow-xl rounded-2xl z-50    pt-12 lg:pt-0 "><div class="fixed top-0 left-0 h-[100vh] w-full bg-black opacity-80">d</div><div class="w-full content-center z-50 bg-white  lg:rounded-l-2xl" ><Image src={bigImgActive.imageData}  onClick={()=>showMore(bigImgActive)} layout="intrinsic" height="200" width="500" alt={"Image"} className="mx-auto   z-50 hover:cursor-pointer" />
-            <p className="text-myCol px-4 text-xs pt-6 text-center z-50">sdasdasd asdsadas dasd asdasd as das das</p><p className="text-myCol px-4 text-xs pt-6 text-center z-50">
-                  {bigImgActive.title}
+
+            bigImgActive?<div className="absolute left-0 right-0 mx-auto top-[-50px] flex w-[100%] lg:w-[80%] flex-col lg:flex-row bg-white shadow-xl rounded-2xl z-50    pt-12 lg:pt-0 ">  <div onClick={()=>closeMore()} class="fixed top-0 left-0 h-[100vh] w-full bg-black opacity-80 hover:cursor-pointer"></div><div class="w-full content-left z-50 bg-white  lg:rounded-l-2xl" >
+              <div><Image src='/closeIcon.png' width='32' height='32' alt='close card logo' className=" right-0 block lg:hidden  absolute mt-6 mr-6 hover:cursor-pointer z-99"  onClick={()=>closeMore()}/><p className="text-center text-[24px] text-myCol font-bold pb-8 pt-6">{bigImgActive.title}</p></div>
+              <div className="relative h-[full]  flex justify-center"><Image src={bigImgActive.imageData}  height={200}  width={784}alt={"Image"} className="h-[100%] object-contain max-h-[600px]  z-50 " />
+                
+              </div>
+              <hr className="h-2 mt-10 mx-6"/>
+              <p className="text-myCol text-s py-6 pb-8 text-left lg:ml-32 ml-2 z-50">
+                  <strong>Opis</strong>: {bigImgActive.description}
                 </p>
-                <p className="text-myCol px-4 text-xs pt-6 text-center z-50">
-                  {bigImgActive.description}
-                </p></div>
+            </div>
           <div className="lg:w-1/2 w-1/1  z-50 bg-white rounded-b-2xl lg:rounded-r-2xl lg:rounded-l-none relative ">
             <div className="">
+            <Image src='/closeIcon.png' width='32' height='32' alt='close card logo' className=" hidden lg:block right-0 absolute mt-6 mr-6 hover:cursor-pointer z-99"  onClick={()=>closeMore()}/>
               <p className="text-center  text-myCol text-[24px] pt-6">Komentarze</p><br/>
-              <div className="overflow-auto h-[400px]">
-              <hr />
-              {comments.map((comment, index) => (
+              <hr className="h-1 bg-myCol mr-6" />
+              <div className="overflow-auto max-h-[400px] ">
+              {comments==''?<p className='text-center pt-8 text-[#595959]'>Bądź pierwszym komentującym !</p>:<span className="hidden"></span>}
+              {comments.toReversed().map((comment, index) => (
   <div key={index} className="text-myCol px-4 text-xs pt-6 text-center z-50">
+    <p className="text-myCol font-bold text-left">{comment.id_User}</p>
     <p className="text-left">{comment.text}</p>
     <p className="text-left">{comment.date}</p>
   </div>
@@ -127,7 +139,7 @@ export default function Home() {
 </div>
             </div>
             
-            <div className="w-[100%] z-50 mb-auto h-auto  lg:bottom-0 ">
+            <div className="w-[100%] z-50 mb-auto h-auto lg:absolute lg:bottom-0 ">
             
             <p className=" text-[18px] text-myCol px-4 pt-8 z-50">Dodaj komentarz</p>
 
@@ -137,7 +149,7 @@ export default function Home() {
                   
                 <div className=' z-50'>
                   
-                    <textarea id="description" value={commentText} onChange={(e) => setCommentText(e.target.value)} className=" z-50 resize-none px-2 w-[100%] h-[102px] text-[18px] lg:w-[100%] border border-myCol rounded bg-formInputBgCol" />
+                    <textarea id="description" value={commentText} onChange={(e) => setCommentText(e.target.value)} className=" z-50 resize-none px-2 w-[100%] h-[102px] text-[18px] lg:w-[100%] border border-myCol rounded bg-formInputBgCol" required />
                     <button type="submit" className=' z-50 bg-myCol p-2 rounded-md text-myBg shadow-lg px-8 my-4'>Dodaj</button>
                 </div>
                
@@ -157,7 +169,7 @@ export default function Home() {
           {allImages.map((image, index) => (
             <div key={index} className="md:w-[350px] md:h-[400px] w-[100%]   bg-black m-8 text-center grid rounded-2xl relative overflow-hidden shadow-2xl grid justify-items-center">
               <img src={image.imageData} onClick={() => showMore(image)} className=" size-full justify-center rounded-t-2xl rounded-t-2xl transition-transform duration-300 transform hover:scale-110 hover:cursor-pointer" alt={`Obrazek ${index}`} />
-              <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80">Obrazek {index +1}</span>
+              <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80 ">Obrazek {image.title}</span>
             </div>
           ))}
     {

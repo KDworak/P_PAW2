@@ -14,7 +14,7 @@ const passwordSchema = new mongoose.Schema({
 const PasswordModel = mongoose.model('password', passwordSchema);
 
 async function createOrUpdate(data) {
-    const result = await PasswordModel.findOneAndUpdate({ userId: data.userId });
+    const result = await PasswordModel.findOne({ userId: data.userId });
     if (!result) {
         const result = await new PasswordModel({ userId: data.userId, password: data.password }).save();
         if (result) {

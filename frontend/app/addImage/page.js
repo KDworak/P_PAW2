@@ -31,7 +31,10 @@ const ImageUploadForm = () => {
             });
 
             setMessage(response.data);
-            
+            setIdUser('');
+            setFile('');
+            setDescription ('');
+            setIsPublic(false);
         } catch (error) {
             console.error('Error uploading image:', error);
             setMessage('Błąd w przesyłaniu pliku. Upewnij się, że uzupełniłeś wszystkie pola.');
