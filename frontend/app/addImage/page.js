@@ -19,7 +19,7 @@ const ImageUploadForm = () => {
         try {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('id_user', id_user);
+            formData.append('id_user', '664db6da0c80acd3c6a7e7c4'); //zmienic
             formData.append('title', title);
             formData.append('description', description);
             formData.append('is_public', isPublic);
@@ -31,7 +31,10 @@ const ImageUploadForm = () => {
             });
 
             setMessage(response.data);
-            
+            setIdUser('');
+            setFile('');
+            setDescription ('');
+            setIsPublic(false);
         } catch (error) {
             console.error('Error uploading image:', error);
             setMessage('Błąd w przesyłaniu pliku. Upewnij się, że uzupełniłeś wszystkie pola.');
