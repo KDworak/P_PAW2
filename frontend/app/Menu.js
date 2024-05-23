@@ -33,7 +33,7 @@ const Menu = () => {
         <Link href="/addImage" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Dodaj zdjęcie</Link>
         <Link href="/login" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Logowanie</Link>
         <Link href="/register" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Rejestracja</Link>
-        <Link href="#" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">O serwisie</Link>
+        <Link href="/userImages" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Moje Zdjęcia</Link>
       </div>
       <button onClick={toggleMenu} className="block absolute right-5 top-5 lg:hidden p-4">
         {isOpen ? (
