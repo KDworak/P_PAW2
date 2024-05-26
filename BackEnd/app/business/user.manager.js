@@ -19,8 +19,8 @@ function create(context) {
         }
         userData = await user;
         await PasswordDAO.authorize(user.id, hashString(password));
-        const token = await TokenDAO.create(userData);
-        return getToken(token);
+        //const token = await TokenDAO.create(userData);
+        return /*getToken(token);*/ true;
     }
 
     function getToken(token) {
