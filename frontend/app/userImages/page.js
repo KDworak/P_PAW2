@@ -122,9 +122,9 @@ export default function userImages() {
     <div className="relative">
     
       <div className=" w-100 text-[18px] lg:w-3/4  text-myCol  mx-auto mt-[64px]">
-        <p className="text-[32px]">Zdjęcia Użytkownika</p>
+        <p className="text-[32px] text-center lg:text-left">Zdjęcia Użytkownika</p>
         <hr className="h-0.5 bg-myCol"/>
-        <div className="mt-8">
+        <div className="mt-8 ml-2 lg:ml-0">
           <span className=" font-bold">Nazwa użytkownika: </span> <span>Jan Kowalski</span> <br/>
           <span className=" font-bold">Email: </span> <span>j.kowalski@gmail.com</span> <br/>
         </div>
@@ -196,7 +196,7 @@ export default function userImages() {
             <div key={index} className="md:w-[350px] md:h-[400px] w-[100%]   bg-black m-8 text-center grid rounded-2xl relative overflow-hidden shadow-2xl grid justify-items-center">
               <img src={image.imageData} onClick={() => showMore(image)} className=" size-full relative justify-center rounded-t-2xl rounded-t-2xl transition-transform duration-300 transform hover:scale-110 hover:cursor-pointer" alt={`Obrazek ${index}`} />
               <Image src='/trash.png' width='64' height='64' alt='delete icon' className="  lg:block right-[0px] absolute mt-2 mr-2 hover:cursor-pointer transition-transform duration-300 transform hover:scale-125 z-99"  onClick={()=>deleteUserImage(image._id)}/>
-              <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80 ">Obrazek {}</span>
+              <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80 ">{image.title}</span>
             </div>
           ))}
     {
