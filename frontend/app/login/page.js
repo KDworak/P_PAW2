@@ -1,25 +1,31 @@
 "use client";
 import React, { useState } from 'react';
 import axios from 'axios'; 
+import { useUser } from '../userContext';
+import { useRouter } from 'next/navigation';
 //var signIn = false;
 
 const login = () => {
-
-    const [login, setLogin] = useState('');
+    const { login } = useUser();
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [msgFail, setMsgFail] = useState('');
     const [msgSuccess, setMsgSuccess] = useState('');
+    const router = useRouter(); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/api/user/auth', {login: login, password: password});
+            const response = await axios.post('http://localhost:3001/api/user/auth', {login: username, password: password});
+            const userData = response.data;
+            console.log(userData);
+            login(username,userData.userid);
 
-            setLogin('');
+            setUsername('');
             setPassword('');
             setMsgSuccess('Użytkownik istnieje, pomyślnie zalogowano!');setMsgFail('');
             //signIn = true;
-            console.log(response.data); 
+            router.push('/');
         } catch (error) {
             console.error('Error:', error);
             setMsgSuccess('');setMsgFail('Użytkownik nie istnieje, sprawdź dane!');
@@ -36,13 +42,13 @@ const login = () => {
             <p className='text-[red]'>{msgFail}</p>
             <p className='text-[green]'>{msgSuccess}</p>
             <br/>
-            <label htmlFor="id_user">Login:</label><br/>
+            <label htmlFor="login">Login:</label><br/>
                 <div className=' flex justify-center lg:justify-normal'>
                     
-                    <input type="text" id="login" value={login} onChange={(e) => setLogin(e.target.value)} className=" w-[100%] h-[48px] text-[24px] lg:w-[400px] border border-myCol rounded bg-formInputBgCol" required/>
+                    <input type="text" id="login" value={username} onChange={(e) => setUsername(e.target.value)} className=" w-[100%] h-[48px] text-[24px] lg:w-[400px] border border-myCol rounded bg-formInputBgCol" required/>
                 </div>
                 <br/>
-                <label htmlFor="title">Hasło:</label><br/>
+                <label htmlFor="password">Hasło:</label><br/>
                 <div className='flex justify-center lg:justify-normal'>
                     
                     <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-[100%] h-[48px] text-[24px] lg:w-[400px] border border-myCol rounded bg-formInputBgCol" required/>

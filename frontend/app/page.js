@@ -1,14 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-
+import { useUser } from './userContext';
 export default function Home() {
   const [allImages, setAllImages] = useState([]);
   const [bigImgActive, setBigImgActive] = useState();
   const [loading, setLoading] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
-
+  const { userName, userId } = useUser();
 
   useEffect(() => {
     const fetchAllImages = async () => {
@@ -16,12 +16,12 @@ export default function Home() {
         setLoading(true);
         const response = await fetch("http://127.0.0.1:3001/api/Images");
         const data = await response.json();
-        console.log(data)
+        //console.log(data)
         const convertedImages = data.map(image => {
           if (image.image_data && image.imgType) {
-            console.log(Buffer.from(image.image_data.data).toString('base64'));
+            //console.log(Buffer.from(image.image_data.data).toString('base64'));
             const imageData = `data:${image.imgType};base64,${Buffer.from(image.image_data.data).toString('base64')}`;
-            console.log(image._id)
+            //console.log(image._id)
             return { ...image, imageData };
           }
           return null; // Jeśli image_data lub imgType nie istnieje, zwracamy null
@@ -77,7 +77,7 @@ export default function Home() {
         },
         body: JSON.stringify({
           id_IMG: bigImgActive._id,
-          id_User: '664db6da0c80acd3c6a7e7c4', 
+          id_User: userId, 
           text: commentText,
           date: formattedDate,
         }),
@@ -127,7 +127,7 @@ export default function Home() {
             <Image src='/closeIcon.png' width='32' height='32' alt='close card logo' className=" hidden lg:block right-0 absolute mt-6 mr-6 hover:cursor-pointer z-99"  onClick={()=>closeMore()}/>
               <p className="text-center  text-myCol text-[24px] pt-6">Komentarze</p><br/>
               <hr className="h-0.5 bg-myCol mr-6" />
-              <div className="overflow-auto max-h-[400px] ">
+              <div className="overflow-auto max-h-[500px] ">
               {comments==''?<p className='text-center pt-8 text-[#595959]'>Bądź pierwszym komentującym !</p>:<span className="hidden"></span>}
               {comments.toReversed().map((comment, index) => (
   <div key={index} className="text-myCol px-4 text-xs pt-6 text-center z-50">
@@ -139,7 +139,7 @@ export default function Home() {
 </div>
             </div>
             
-            <div className="w-[100%] z-50 mb-auto h-auto lg:absolute lg:bottom-0 ">
+            {userId?<div className="w-[100%] z-50 mb-auto h-auto lg:absolute lg:bottom-0 ">
             
             <p className=" text-[18px] text-myCol px-4 pt-8 z-50">Dodaj komentarz</p>
 
@@ -156,7 +156,7 @@ export default function Home() {
                 
             </form>
 
-          </div>
+          </div>:<p className=" text-center text-myCol py-12">Aby móc dodać komentarz <a href="/login" className="font-bold">Zaloguj się</a> lub <a href="/register" className="font-bold ">Zarejestruj</a></p>}
           </div>
         </div>:<span className="absolute"></span>}
 

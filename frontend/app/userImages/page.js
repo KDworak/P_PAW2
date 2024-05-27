@@ -2,27 +2,28 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from 'axios';
-
+import { useUser } from '../userContext';
 export default function userImages() {
   const [allImages, setAllImages] = useState([]);
   const [bigImgActive, setBigImgActive] = useState();
   const [loading, setLoading] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
-
+  const { userName, userId } = useUser();
 
   useEffect(() => {
+    
     const fetchAllImages = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://127.0.0.1:3001/api/Image/by-owner/664db6da0c80acd3c6a7e7c4");
+        const response = await fetch(`http://127.0.0.1:3001/api/Image/by-owner/${userId}`);
         const data = await response.json();
-        console.log(data)
+        //console.log(data)
         const convertedImages = data.map(image => {
           if (image.image_data && image.imgType) {
-            console.log(Buffer.from(image.image_data.data).toString('base64'));
+            //console.log(Buffer.from(image.image_data.data).toString('base64'));
             const imageData = `data:${image.imgType};base64,${Buffer.from(image.image_data.data).toString('base64')}`;
-            console.log(image._id)
+            //console.log(image._id)
             return { ...image, imageData };
           }
           return null; // Jeśli image_data lub imgType nie istnieje, zwracamy null
@@ -43,6 +44,7 @@ export default function userImages() {
     fetchAllImages();
   }, []);
 
+ 
 
   const showMore = async (image) => {
     setBigImgActive(image);
@@ -93,7 +95,7 @@ export default function userImages() {
         },
         body: JSON.stringify({
           id_IMG: bigImgActive._id,
-          id_User: '664db6da0c80acd3c6a7e7c4', 
+          id_User: userId, 
           text: commentText,
           date: formattedDate,
         }),
@@ -122,11 +124,11 @@ export default function userImages() {
     <div className="relative">
     
       <div className=" w-100 text-[18px] lg:w-3/4  text-myCol  mx-auto mt-[64px]">
-        <p className="text-[32px] text-center lg:text-left">Zdjęcia Użytkownika</p>
+        <p className="text-[32px] text-center lg:text-left">Zdjęcia Użytkownika </p>
         <hr className="h-0.5 bg-myCol"/>
         <div className="mt-8 ml-2 lg:ml-0">
-          <span className=" font-bold">Nazwa użytkownika: </span> <span>Jan Kowalski</span> <br/>
-          <span className=" font-bold">Email: </span> <span>j.kowalski@gmail.com</span> <br/>
+         
+          
         </div>
       </div>
 
