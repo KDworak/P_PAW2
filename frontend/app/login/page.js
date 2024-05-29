@@ -19,7 +19,7 @@ const login = () => {
             const response = await axios.post('http://localhost:3001/api/user/auth', {login: username, password: password});
             const userData = response.data;
             console.log(userData);
-            login(username,userData.userid);
+            login(username,userData.userid, userData.token);
 
             setUsername('');
             setPassword('');

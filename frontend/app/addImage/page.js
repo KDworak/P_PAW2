@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from "next/image";
 import { useUser } from '../userContext'; 
-
+import withAuth from '../withAuth';
 const ImageUploadForm = () => {
 
     const [file, setFile] = useState(null);
@@ -36,7 +36,7 @@ const ImageUploadForm = () => {
                 }
             });
 
-            setMessage(response.data);
+            setMessage("Zdjęcie zostało dodane !");
             setFile('');
             setTitle('');
             setDescription ('');
@@ -72,7 +72,7 @@ const ImageUploadForm = () => {
                     <label htmlFor="file">Wybierz zdjęcie:</label><br/>
                     <input type="file" id="file" accept="image/*" onChange={handleFileChange} className=" " />
                 </div><br/>
-                <button type="submit" className='bg-myCol p-2 rounded-md text-myBg shadow-lg'>Upload</button>
+                <button type="submit" className='bg-myCol p-2 rounded-md text-myBg shadow-lg'>Dodaj</button>
                 <Image src='/addImageLogo.png' width='200' height='200' alt='addImage logo' priority className='mt-[-300px] ml-[50%] hidden lg:block'/>
                 {message && <p className='text-red lg:mt-[102px]'>{message}</p>}
                 
@@ -83,4 +83,4 @@ const ImageUploadForm = () => {
     );
 };
 
-export default ImageUploadForm;
+export default withAuth(ImageUploadForm);
