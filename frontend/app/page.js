@@ -1,27 +1,28 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-
+import { useUser } from './userContext';
+import axios from 'axios'; 
 export default function Home() {
   const [allImages, setAllImages] = useState([]);
   const [bigImgActive, setBigImgActive] = useState();
   const [loading, setLoading] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState([]);
-
+  const { userName, userId } = useUser();
 
   useEffect(() => {
     const fetchAllImages = async () => {
       try {
         setLoading(true);
-        const response = await fetch("http://127.0.0.1:3001/api/Images");
-        const data = await response.json();
-        console.log(data)
+        const response = await axios.get("http://127.0.0.1:3001/api/Images");
+        const data = response.data;
+        //console.log(data)
         const convertedImages = data.map(image => {
           if (image.image_data && image.imgType) {
-            console.log(Buffer.from(image.image_data.data).toString('base64'));
+            //console.log(Buffer.from(image.image_data.data).toString('base64'));
             const imageData = `data:${image.imgType};base64,${Buffer.from(image.image_data.data).toString('base64')}`;
-            console.log(image._id)
+            //console.log(image._id)
             return { ...image, imageData };
           }
           return null; // Jeśli image_data lub imgType nie istnieje, zwracamy null
@@ -46,8 +47,8 @@ export default function Home() {
   const showMore = async (image) => {
     setBigImgActive(image);
     try {
-      const response = await fetch(`http://127.0.0.1:3001/api/Comment/byId/${image._id}`);
-      const commentsData = await response.json();
+      const response = await axios.get(`http://127.0.0.1:3001/api/Comment/byId/${image._id}`);
+      const commentsData = response.data;
       setComments(commentsData);
     } catch (error) {
       console.error('Error fetching comments:', error);
@@ -56,8 +57,25 @@ export default function Home() {
 
   const closeMore = () => {
     setBigImgActive(null);
+    setCommentText('');
     return 0;
   };
+
+  const deleteUserComment = async (commentIdToDelete) => {
+    const confirmed = window.confirm("Czy na pewno chcesz usunąć ten komentarz ?");
+  if (!confirmed) {
+    return;
+  }
+  try {
+    await axios.put(`http://127.0.0.1:3001/api/deleteComment/${commentIdToDelete}`);
+    setComments(prevComments => prevComments.filter(comment => comment._id !== commentIdToDelete));
+    //console.log(commentIdToDelete);
+    console.log('Comment deleted successfully:');
+  } catch (error) {
+    //console.error('Error deleting comment:', error);
+  }
+  return 0;
+};
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
@@ -70,20 +88,18 @@ export default function Home() {
 
       const formattedDate = `${day}-${month}-${year}`;
       
-      const response = await fetch('http://127.0.0.1:3001/api/createComment', {
-        method: 'POST',
+      const response = await axios.post('http://127.0.0.1:3001/api/createComment', {
+        id_IMG: bigImgActive._id,
+        id_User: userId, 
+        text: commentText,
+        date: formattedDate,
+      }, {
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id_IMG: bigImgActive._id,
-          id_User: '664db6da0c80acd3c6a7e7c4', 
-          text: commentText,
-          date: formattedDate,
-        }),
+        }
       });
-
-      if (response.ok) {
+  
+      if (response.status === 201) {
         console.log('Comment added');
         showMore(bigImgActive);
         setCommentText('');
@@ -112,7 +128,7 @@ export default function Home() {
 
       {//bigImgActive?<div class="flex"><div><Image src={bigImgActive}  onClick={()=>showMore(bigImgActive)} layout="intrinsic" height="200" width="500" alt={"Image"} className=" top-1/3 rounded-t-2xl0 fixed rounded-t-2xl z-40 hover:cursor-pointer" /></div>
 
-            bigImgActive?<div className="absolute left-0 right-0 mx-auto top-[-50px] flex w-[100%] lg:w-[80%] flex-col lg:flex-row bg-white shadow-xl rounded-2xl z-50    pt-12 lg:pt-0 ">  <div onClick={()=>closeMore()} class="fixed top-0 left-0 h-[100vh] w-full bg-black opacity-80 hover:cursor-pointer"></div><div class="w-full content-left z-50 bg-white  lg:rounded-l-2xl" >
+            bigImgActive?<div className="absolute lg:fixed left-0 right-0 mx-auto top-0 lg:top-[50px] flex w-[100%] lg:w-[80%] flex-col lg:flex-row bg-white shadow-xl rounded-2xl z-50    pt-12 lg:pt-0 ">  <div onClick={()=>closeMore()} class="fixed top-0 left-0 h-[100vh] w-full bg-black opacity-80 hover:cursor-pointer"></div><div class="w-full content-left z-50 bg-white  lg:rounded-l-2xl" >
               <div><Image src='/closeIcon.png' width='32' height='32' alt='close card logo' className=" right-0 block lg:hidden  absolute mt-6 mr-6 hover:cursor-pointer z-99"  onClick={()=>closeMore()}/><p className="text-center text-[24px] text-myCol font-bold pb-8 pt-6">{bigImgActive.title}</p></div>
               <div className="relative h-[full]  flex justify-center"><Image src={bigImgActive.imageData}  height={200}  width={784}alt={"Image"} className="h-[100%] object-contain max-h-[600px]  z-50 " />
                 
@@ -127,19 +143,20 @@ export default function Home() {
             <Image src='/closeIcon.png' width='32' height='32' alt='close card logo' className=" hidden lg:block right-0 absolute mt-6 mr-6 hover:cursor-pointer z-99"  onClick={()=>closeMore()}/>
               <p className="text-center  text-myCol text-[24px] pt-6">Komentarze</p><br/>
               <hr className="h-0.5 bg-myCol mr-6" />
-              <div className="overflow-auto max-h-[400px] ">
+              <div className="overflow-auto max-h-[300px] lg:max-h-[500px] ">
               {comments==''?<p className='text-center pt-8 text-[#595959]'>Bądź pierwszym komentującym !</p>:<span className="hidden"></span>}
               {comments.toReversed().map((comment, index) => (
-  <div key={index} className="text-myCol px-4 text-xs pt-6 text-center z-50">
-    <p className="text-myCol font-bold text-left">{comment.id_User}</p>
+  <div key={index} className="relative text-myCol px-4 text-xs pt-6 text-center z-50">
+    <p className="text-myCol font-bold text-left pb-">{comment.id_User}</p>
     <p className="text-left">{comment.text}</p>
     <p className="text-left">{comment.date}</p>
+    {(userName==comment.id_User)?<span onClick={()=>deleteUserComment(comment._id)} className="absolute top-[50%] right-[24px] font-bold text-[24px] hover:cursor-pointer">x</span>:<></>}
   </div>
 ))}
 </div>
             </div>
             
-            <div className="w-[100%] z-50 mb-auto h-auto lg:absolute lg:bottom-0 ">
+            {userId?<div className="w-[100%] z-50 mb-auto h-auto lg:absolute lg:bottom-0 ">
             
             <p className=" text-[18px] text-myCol px-4 pt-8 z-50">Dodaj komentarz</p>
 
@@ -149,14 +166,14 @@ export default function Home() {
                   
                 <div className=' z-50'>
                   
-                    <textarea id="description" value={commentText} onChange={(e) => setCommentText(e.target.value)} className=" z-50 resize-none px-2 w-[100%] h-[102px] text-[18px] lg:w-[100%] border border-myCol rounded bg-formInputBgCol" required />
+                    <textarea id="description" value={commentText} onChange={(e) => setCommentText(e.target.value)} className=" z-50 resize-none px-2 w-[100%] h-[102px] text-[18px] lg:w-[100%] border border-[#858585] rounded bg-formInputBgCol" required />
                     <button type="submit" className=' z-50 bg-myCol p-2 rounded-md text-myBg shadow-lg px-8 my-4'>Dodaj</button>
                 </div>
                
                 
             </form>
 
-          </div>
+          </div>:<p className=" text-center text-myCol py-12">Aby móc dodać komentarz <a href="/login" className="font-bold">Zaloguj się</a> lub <a href="/register" className="font-bold ">Zarejestruj</a></p>}
           </div>
         </div>:<span className="absolute"></span>}
 
@@ -169,7 +186,7 @@ export default function Home() {
           {allImages.map((image, index) => (
             <div key={index} className="md:w-[350px] md:h-[400px] w-[100%]   bg-black m-8 text-center grid rounded-2xl relative overflow-hidden shadow-2xl grid justify-items-center">
               <img src={image.imageData} onClick={() => showMore(image)} className=" size-full justify-center rounded-t-2xl rounded-t-2xl transition-transform duration-300 transform hover:scale-110 hover:cursor-pointer" alt={`Obrazek ${index}`} />
-              <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80 ">Obrazek {image.title}</span>
+              <span className="text-myBg align-center absolute bottom-0 left-0 right-0 z-10 bg-black py-4 opacity-80 ">{image.title}</span>
             </div>
           ))}
     {

@@ -20,11 +20,12 @@ function create(context) {
         userData = await user;
         await PasswordDAO.authorize(user.id, hashString(password));
         const token = await TokenDAO.create(userData);
+        console.log(token);
         return getToken(token);
     }
 
     function getToken(token) {
-        return {token: token.value};
+        return {token: token.value,userid: token.userId};
     }
     async function get(id) {
         let result = await UserDAO.get(id);

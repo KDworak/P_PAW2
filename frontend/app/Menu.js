@@ -1,9 +1,11 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link'
+import { useUser } from './userContext';
+//import signIn from './login/page'
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
-
+  const { userId, userName, logout } = useUser();
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -30,10 +32,11 @@ const Menu = () => {
       )}
       <div className={`flex flex-col lg:flex-row lg:justify-center lg:mx-auto ${isOpen ? 'block' : 'hidden lg:block'}`}>
         <Link href="/" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Zdjęcia</Link>
-        <Link href="/addImage" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Dodaj zdjęcie</Link>
-        <Link href="/login" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Logowanie</Link>
-        <Link href="/register" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Rejestracja</Link>
-        <Link href="/userImages" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Moje Zdjęcia</Link>
+        {userId?<Link href="/addImage" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Dodaj zdjęcie</Link>:<></>}
+        {!userId?<Link href="/login" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Logowanie</Link>:<></>}
+        {!userId?<Link href="/register" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Rejestracja</Link>:<></>}
+        {userId?<Link href="/userImages" className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Moje Zdjęcia ( <span className='font-bold'>{userName}</span> )</Link>:<></>}
+        {userId?<Link href="#" onClick={logout} className="uppercase p-8 transition duration-1000 border-b-4 border-transparent hover:border-myCol">Wyloguj</Link>:<></>}                                                                         
       </div>
       <button onClick={toggleMenu} className="block absolute right-5 top-5 lg:hidden p-4">
         {isOpen ? (
