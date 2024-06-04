@@ -16,9 +16,9 @@ const login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/api/user/auth', {login: username, password: password});
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/user/auth`, {login: username, password: password});
             const userData = response.data;
-            console.log(userData);
+            //console.log(userData);
             login(username,userData.userid, userData.token);
 
             setUsername('');
