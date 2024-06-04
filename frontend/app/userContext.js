@@ -10,12 +10,12 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const storedUserName = localStorage.getItem('userName');
-        const storedUserToken = localStorage.getItem('userToken');
+        const storedUserToken = Cookies.get('userToken');
         const storedUserId = localStorage.getItem('userId');
         if (storedUserName && storedUserId && storedUserToken) {
             setUserName(JSON.parse(storedUserName));
             setUserId(JSON.parse(storedUserId));
-            setUserToken(JSON.parse(storedUserToken));
+            setUserToken(storedUserToken);
         }
         setLoading(false);
     }, []);
