@@ -18,11 +18,15 @@ const Register = () => {
             formData.append('email', email);
             formData.append('password', password);
             console.log(formData);
-            const response = await axios.post('http://127.0.0.1:3001/api/user/create', formData, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/create`, {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(formData)
+});
+
+const data = await response.json();
             setEmail('');
             setName('');
             setPassword('');
