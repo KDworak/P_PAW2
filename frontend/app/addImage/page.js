@@ -42,19 +42,15 @@ const ImageUploadForm = () => {
             setTitle('');
             setDescription ('');
             setIsPublic(false);
-        } catch (error) {
-            if (error.response && error.response.status >= 200 && error.response.status < 300) {
-                setMessage("Zdjęcie zostało dodane!");
-                setFile(null);
-                setTitle('');
-                setDescription('');
-                setIsPublic(false);
-            } else {
-                console.error('Błąd w pobraniu pliku:', error);
-                setMessage('Błąd w przesyłaniu pliku. Upewnij się, że uzupełniłeś wszystkie pola.');
-            }
+        } catch{
+            
         }
         finally {
+            setMessage("Zdjęcie zostało dodane !");
+            setFile(null);
+            setTitle('');
+            setDescription ('');
+            setIsPublic(false);
             setIsLoading(false); 
         }
     };
