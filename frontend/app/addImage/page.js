@@ -23,6 +23,7 @@ const ImageUploadForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
+        setMessage('');
         try {
             const formData = new FormData();
             formData.append('file', file);
@@ -37,16 +38,17 @@ const ImageUploadForm = () => {
                 }
             });
 
-            setMessage("Zdjęcie zostało dodane !");
+            if(response.status==201) setMessage('Zdjęcie dodane');
             setFile(null);
             setTitle('');
             setDescription ('');
             setIsPublic(false);
-        } catch{
-            
+
+        } catch{  
+            console.log(error);            
         }
-        finally {
-            setMessage("Zdjęcie zostało dodane !");
+        finally{
+            if(message!='') setMessage('Błąd podczas wstawiania pliku. Sprawdź czy plik ma format zdjęciowy.');
             setFile(null);
             setTitle('');
             setDescription ('');

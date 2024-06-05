@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios'; 
 import { useUser } from '../userContext';
 import { useRouter } from 'next/navigation';
+import withoutAuth from '../withoutAuth';
 //var signIn = false;
 
 const login = () => {
@@ -62,4 +63,4 @@ const login = () => {
     );
 };
 
-export default login;
+export default withoutAuth(login);
