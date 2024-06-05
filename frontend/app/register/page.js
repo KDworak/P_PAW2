@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import axios from 'axios'; 
+import withoutAuth from '../withoutAuth';
+
 const Register = () => {
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -83,4 +85,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default withoutAuth(Register);
