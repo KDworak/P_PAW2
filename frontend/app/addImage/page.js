@@ -24,6 +24,7 @@ const ImageUploadForm = () => {
         e.preventDefault();
         setIsLoading(true);
         setMessage('');
+        let success = false;
         try {
             const formData = new FormData();
             formData.append('file', file);
@@ -37,8 +38,13 @@ const ImageUploadForm = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            if (response.status === 201) {
+                setMessage('Zdjęcie dodane');
+                success = true; 
+            }
+    
 
-            if(response.status==201) setMessage('Zdjęcie dodane');
+            
             setFile(null);
             setTitle('');
             setDescription ('');
@@ -48,10 +54,12 @@ const ImageUploadForm = () => {
             console.log(error);            
         }
         finally{
-            if(message!='') setMessage('Błąd podczas wstawiania pliku. Sprawdź czy plik ma format zdjęciowy.');
+            if (!success) {
+                setMessage('Błąd podczas wstawiania pliku. Sprawdź czy plik ma format zdjęciowy.');
+            }
             setFile(null);
             setTitle('');
-            setDescription ('');
+            setDescription('');
             setIsPublic(false);
             setIsLoading(false); 
         }
@@ -91,7 +99,7 @@ const ImageUploadForm = () => {
                         </svg>
                     )}
                 </div>
-                {message && <p className='text-red lg:mt-[102px]'>{message}</p>}
+                {message && <p className='absolute text-red lg:mt-[102px]'>{message}</p>}
                 <Image src='/addImageLogo.png' width='200' height='200' alt='addImage logo' priority className='mt-[-300px] ml-[50%] hidden lg:block'/>
                 
             </form>
