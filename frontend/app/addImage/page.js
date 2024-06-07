@@ -50,8 +50,8 @@ const ImageUploadForm = () => {
             setDescription ('');
             setIsPublic(false);
 
-        } catch{  
-            console.log(error);            
+        } catch(error){  
+            console.log(error.response.data);            
         }
         finally{
             if (!success) {
