@@ -24,7 +24,7 @@ const addImage = () => {
         e.preventDefault();
         setIsLoading(true);
         setMessage('');
-        try {
+      
             const formData = new FormData();
             formData.append('file', file);
             formData.append('id_user', userId); 
@@ -32,27 +32,26 @@ const addImage = () => {
             formData.append('description', description);
             formData.append('is_public', isPublic);
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/createImage`, {
-                method: 'POST',
-                body: formData
+            axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/createImage`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                console.log(response);
+                setMessage('Zdjęcie dodane');
+            })
+            .catch(error => {
+                console.log(error);
+                setMessage('Błąd podczas wstawiania pliku.');
+            })
+            .finally(() => {
+                setFile(null);
+                setTitle('');
+                setDescription('');
+                setIsPublic(false);
+                setIsLoading(false);
             });
-    
-            if (!response.ok) {
-                throw new Error('Błąd podczas wstawiania pliku.');
-            }
-            
-            setMessage('Zdjęcie dodane');
-        } catch(error){  
-            console.log(error);  
-            setMessage('Błąd podczas wstawiania pliku.');          
-        }
-        finally{
-            setFile(null);
-            setTitle('');
-            setDescription('');
-            setIsPublic(false);
-            setIsLoading(false); 
-        }
     };
 
     return (
