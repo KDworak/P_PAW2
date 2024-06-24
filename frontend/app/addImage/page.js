@@ -32,11 +32,14 @@ const addImage = () => {
             formData.append('description', description);
             formData.append('is_public', isPublic);
 
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/createImage`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/createImage`, {
+                method: 'POST',
+                body: formData
             });
+    
+            if (!response.ok) {
+                throw new Error('Błąd podczas wstawiania pliku.');
+            }
             
             setMessage('Zdjęcie dodane');
         } catch(error){  
