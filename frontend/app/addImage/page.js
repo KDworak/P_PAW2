@@ -4,7 +4,7 @@ import axios from 'axios';
 import Image from "next/image";
 import { useUser } from '../userContext'; 
 import withAuth from '../withAuth';
-const ImageUploadForm = () => {
+const addImage = () => {
 
     const [file, setFile] = useState(null);
     const [title, setTitle] = useState('');
@@ -24,7 +24,6 @@ const ImageUploadForm = () => {
         e.preventDefault();
         setIsLoading(true);
         setMessage('');
-        let success = false;
         try {
             const formData = new FormData();
             formData.append('file', file);
@@ -38,25 +37,13 @@ const ImageUploadForm = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            if (response.status === 201) {
-                setMessage('Zdjęcie dodane');
-                success = true; 
-            }
-    
-
             
-            setFile(null);
-            setTitle('');
-            setDescription ('');
-            setIsPublic(false);
-
-        } catch{  
-            console.log(error);            
+            setMessage('Zdjęcie dodane');
+        } catch(error){  
+            console.log(error);  
+            setMessage('Błąd podczas wstawiania pliku.');          
         }
         finally{
-            if (!success) {
-                setMessage('Błąd podczas wstawiania pliku. Sprawdź czy plik ma format zdjęciowy.');
-            }
             setFile(null);
             setTitle('');
             setDescription('');
@@ -109,4 +96,4 @@ const ImageUploadForm = () => {
     );
 };
 
-export default withAuth(ImageUploadForm);
+export default withAuth(addImage);
