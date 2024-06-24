@@ -37,7 +37,7 @@ const addImage = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            
+            console.log(response);
             setMessage('Zdjęcie dodane');
         } catch(error){  
             console.log(error);
